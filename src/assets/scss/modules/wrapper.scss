@@ -1,5 +1,6 @@
 .wrapper {
-  max-width: $desktopWidth;
+  width: 100%;
   margin: 0 auto;
-  background-color: green;
+  background-image: url('/assets/img/ori.webp');
+  height: 100vh;
 }

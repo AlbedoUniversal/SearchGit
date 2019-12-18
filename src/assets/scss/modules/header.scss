@@ -1,6 +1,15 @@
-header {
-  background-color: aqua;
-  height: 100px;
+.header {
   width: 100%;
+  // background-color: aqua;
+  height: 100px;
   font-family: Airfool;
+  // background-image: url('/assets/img/w.svg');
+  &-container {
+    width: $desktopWidth;
+    margin: 0 auto;
+  }
+  &-title {
+    text-align: center;
+    color: #f0f8ff;
+  }
 }
