@@ -1,15 +1,15 @@
 .header {
-  width: 100%;
-  // background-color: aqua;
+  // width: 100%;
   height: 100px;
-  font-family: Airfool;
-  // background-image: url('/assets/img/w.svg');
+
   &-container {
-    width: $desktopWidth;
+    max-width: $desktopWidth;
     margin: 0 auto;
+    padding-top: rem(15);
   }
   &-title {
     text-align: center;
-    color: #f0f8ff;
+    color: #535d6c;
+    font-family: Airfool;
   }
 }
