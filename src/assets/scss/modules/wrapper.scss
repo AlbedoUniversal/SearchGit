@@ -1,69 +1,82 @@
-.wrapper {
-  width: 100%;
-  background-image: url("/assets/img/op.svg");
+.index-page {
+  background-image: url("/assets/img/s.svg");
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100%;
-  height: 100vh;
-  .wrapper-content {
-    max-width: $desktopWidth;
-    margin: 0 auto;
-    .find {
-      &-title {
-        text-align: center;
-        font-family: Airfool;
-      }
-    }
-    .inputs {
-      text-align: center;
-      &-search {
-        padding: 0.6em 0.5em;
-        border: 1px solid rgb(73, 63, 18);
-        border-radius: rem(3);
-        outline: none;
-      }
-      &-type {
-        border-radius: rem(3);
-        outline: none;
-        border: 1px solid rgb(73, 63, 18);
-        padding: 0.6em 0.5em;
-        background-color: rgba(255, 255, 255, 0.9);
-        font-family: Airfool;
-        cursor: pointer;
-        transition: 0.3s;
-        &:hover {
-          background-color: #000000;
-          color: aliceblue;
-        }
-      }
-    }
-    .cards {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-
-      &-item {
-        background-color: rgba(255, 255, 255, 0.4);
-        display: flex;
-        flex-direction: column;
-        min-width: 300px;
-        padding: rem(10);
-        margin-right: rem(25);
-        margin-bottom: rem(25);
-        border: 1px solid #000000;
-        border-radius: rem(3);
-        &__photo {
-          align-self: center;
-          width: 100px;
-          height: 100px;
-        }
-        &__login,
-        &__link,
-        &__rating {
-          margin: rem(7) rem(6) rem(7) rem(6);
-          border-bottom: 1px solid #000;
+  .wrapper {
+    .wrapper-content {
+      max-width: $desktopWidth;
+      margin: 0 auto;
+      .find {
+        &-title {
+          text-align: center;
           font-family: Airfool;
-          color: rgb(57, 123, 153);
+        }
+      }
+      .inputs {
+        text-align: center;
+        &-search {
+          padding: 0.6em 0.5em;
+          border: 1px solid rgb(73, 63, 18);
+          border-radius: rem(3);
+          outline: none;
+        }
+        &-type {
+          border-radius: rem(3);
+          outline: none;
+          border: 1px solid rgb(73, 63, 18);
+          padding: 0.6em 0.5em;
+          background-color: rgba(255, 255, 255, 0.9);
+          font-family: Airfool;
+          cursor: pointer;
+          transition: 0.3s;
+          &:hover {
+            background-color: #000000;
+            color: aliceblue;
+          }
+        }
+      }
+      .cards {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        &-item {
+          background-color: rgba(255, 255, 255, 0.4);
+          display: flex;
+          flex-direction: column;
+          width: 300px;
+          padding: rem(10);
+          margin-right: rem(25);
+          margin-bottom: rem(25);
+          border: 1px solid #000000;
+          border-radius: rem(3);
+          word-break: break-all;
+          &__photo {
+            align-self: center;
+            width: 100px;
+            height: 100px;
+          }
+          &__link {
+            .goOver {
+              color: inherit;
+            }
+          }
+          &__login,
+          &__link,
+          &__rating {
+            font-size: rem(12);
+            margin: rem(7) rem(6) rem(7) rem(6);
+            border-bottom: 1px solid #000;
+            font-family: Airfool;
+            color: rgb(57, 123, 153);
+          }
+        }
+      }
+      .deletePrev {
+        display: none;
+        .active {
+          display: block;
+          text-align: center;
         }
       }
     }
