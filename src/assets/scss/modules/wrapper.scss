@@ -74,10 +74,10 @@
       }
       .deletePrev {
         display: none;
-        .active {
-          display: block;
-          text-align: center;
-        }
+      }
+      .deletePrev.active {
+        display: block;
+        text-align: center;
       }
     }
   }
