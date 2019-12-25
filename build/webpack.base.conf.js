@@ -8,8 +8,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const PATHS = {
   // лучше сразу вывести пути в константу; а зачем мы его поджключаем, если он уже есть в ноде? да просто так принято
   src: path.join(__dirname, "../src"),
-  dist: path.join(__dirname, "../dist"), // при билде меняем на паблик - public
-  assets: "assets/" // при билде меняем на статик - static
+  dist: path.join(__dirname, "../dist"),
+  assets: "assets/"
 };
 
 const PAGES_DIR = `${PATHS.src}/pug/pages/`;
