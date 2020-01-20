@@ -1,8 +1,5 @@
 import { functionTypeParam } from "babel-types";
 
-// const userCardHtml =
-//   '<img class="cards-item__photo" alt=""><p class="cards-item__login"></p><p class="cards-item__link"></p><p class="cards-item__rating"></p>';
-
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
 
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
@@ -13,8 +10,22 @@ const sectionDelete = document.querySelector(".deletePrev"); // контейне
 
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
+console.log(deleteAllBtn);
+
+function toLocalCard() {
+  let gitCards = allCards.innerHTML;
+  localStorage.setItem("gitCards", gitCards);
+}
+
+function toLocalBtnRemove() {
+  let btnRemove = deleteAllBtn;
+  localStorage.setItem("btnRemove", btnRemove);
+}
+
 function getResultFound(items) {
-  sectionDelete.classList.add("active");
+  if (items.length != 0) {
+    sectionDelete.classList.add("active");
+  }
   for (let i = 0; i < items.length; i++) {
     const card = document.createElement("div"); // карточка
     card.classList.add("cards-item"); // присваиваем класс
@@ -66,10 +77,9 @@ function getResultFound(items) {
     raitString.innerText = items[i].score; // вставляем
     //////////////////////////////////////////////////////////////////////////////////////////////
     allCards.appendChild(card);
+    toLocalCard();
   }
-  if ((items = [])) {
-    console.log(2);
-  }
+  toLocalBtnRemove();
 }
 
 function clearAll() {
@@ -86,6 +96,10 @@ function getData() {
     .then(responce => responce.json())
     .then(json => {
       getResultFound(json.items);
+      if (json.items.length === 0) {
+        alert("Простите, но мы не смогли найти людей по такому логину");
+        toLocalCard();
+      }
     });
 }
 
@@ -110,3 +124,8 @@ deleteAllBtn.addEventListener("click", () => {
   clearAll();
   sectionDelete.classList.remove("active");
 });
+
+if (localStorage.getItem("gitCards") && localStorage.getItem("btnRemove")) {
+  allCards.innerHTML = localStorage.getItem("gitCards");
+  // deleteAllBtn.html(localStorage.getItem("btnRemove"));
+}
