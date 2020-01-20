@@ -1,4 +1,5 @@
 import { functionTypeParam } from "babel-types";
+import { renderCard } from './render.js';
 
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
 
@@ -10,55 +11,55 @@ const sectionDelete = document.querySelector(".deletePrev"); // контейне
 
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
-console.log(deleteAllBtn);
+let saveLocalStorage = [];
 
-function toLocalCard() {
-  let gitCards = allCards.innerHTML;
-  localStorage.setItem("gitCards", gitCards);
+let newCard;
+
+
+function createCard() {
+  const card = document.createElement("div"); // карточка
+  card.classList.add("cards-item"); // присваиваем класс
+
+  const cardImg = document.createElement("img"); // аватарка
+  cardImg.classList.add("cards-item__photo"); // присваиваем класс
+
+  const cardLogin = document.createElement("p"); // логин
+  cardLogin.classList.add("cards-item__login"); // присваиваем класс
+
+  const cardWrapperLink = document.createElement("p"); // обертка ссылки
+  cardWrapperLink.classList.add("cards-item__link"); // присваиваем класс
+  const cardLink = document.createElement("a"); // ссылка
+  cardLink.classList.add("goOver"); // присваиваем класс
+  cardWrapperLink.appendChild(cardLink); //аппендим а в р
+
+  const cardRating = document.createElement("p"); // рэйтинг
+  cardRating.classList.add("cards-item__rating"); // присваиваем класс
+  card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
+
+  newCard = card;
 }
 
-function toLocalBtnRemove() {
-  let btnRemove = deleteAllBtn;
-  localStorage.setItem("btnRemove", btnRemove);
-}
 
 function getResultFound(items) {
   if (items.length != 0) {
     sectionDelete.classList.add("active");
   }
   for (let i = 0; i < items.length; i++) {
-    const card = document.createElement("div"); // карточка
-    card.classList.add("cards-item"); // присваиваем класс
+    createCard();
 
-    const cardImg = document.createElement("img"); // аватарка
-    cardImg.classList.add("cards-item__photo"); // присваиваем класс
-
-    const cardLogin = document.createElement("p"); // логин
-    cardLogin.classList.add("cards-item__login"); // присваиваем класс
-
-    const cardWrapperLink = document.createElement("p"); // обертка ссылки
-    cardWrapperLink.classList.add("cards-item__link"); // присваиваем класс
-    const cardLink = document.createElement("a"); // ссылка
-    cardLink.classList.add("goOver"); // присваиваем класс
-    cardWrapperLink.appendChild(cardLink); //аппендим а в р
-
-    const cardRating = document.createElement("p"); // рэйтинг
-    cardRating.classList.add("cards-item__rating"); // присваиваем класс
-
-    card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
-    card.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
+    newCard.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    cardImg.setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем
+    newCard.childNodes[0].setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем
     //////////////////////////////////////////////////////////////////////////////////////////////
-    let namingString = [...card.childNodes].find(
+    let namingString = [...newCard.childNodes].find(
       // дотягиваемся до логина
 
       x => x.className === "cards-item__login"
     );
     namingString.innerText = items[i].login; // вставляем
     //////////////////////////////////////////////////////////////////////////////////////////////
-    let linkString = [...card.childNodes].find(
+    let linkString = [...newCard.childNodes].find(
       // дотягиваемся до p для а
 
       x => x.className === "cards-item__link"
@@ -70,16 +71,14 @@ function getResultFound(items) {
     allCardLinks.innerText = items[i].html_url; // вставляем
     allCardLinks.setAttribute("href", items[i].html_url);
     //////////////////////////////////////////////////////////////////////////////////////////////
-    let raitString = [...card.childNodes].find(
+    let raitString = [...newCard.childNodes].find(
       // дотягиваемся до рейтингa
       x => x.className === "cards-item__rating"
     );
     raitString.innerText = items[i].score; // вставляем
     //////////////////////////////////////////////////////////////////////////////////////////////
-    allCards.appendChild(card);
-    toLocalCard();
+    allCards.appendChild(newCard);
   }
-  toLocalBtnRemove();
 }
 
 function clearAll() {
@@ -96,9 +95,10 @@ function getData() {
     .then(responce => responce.json())
     .then(json => {
       getResultFound(json.items);
+      saveLocalStorage = json.items;
+      localStorage.setItem('gitCards', saveLocalStorage);
       if (json.items.length === 0) {
         alert("Простите, но мы не смогли найти людей по такому логину");
-        toLocalCard();
       }
     });
 }
@@ -114,7 +114,7 @@ btn.addEventListener("click", () => {
   checkEmptyFieldAndSendRequest();
 });
 
-inputSearch.addEventListener("keydown", function(e) {
+inputSearch.addEventListener("keydown", function (e) {
   if (e.keyCode === 13) {
     checkEmptyFieldAndSendRequest();
   }
@@ -125,7 +125,6 @@ deleteAllBtn.addEventListener("click", () => {
   sectionDelete.classList.remove("active");
 });
 
-if (localStorage.getItem("gitCards") && localStorage.getItem("btnRemove")) {
-  allCards.innerHTML = localStorage.getItem("gitCards");
-  // deleteAllBtn.html(localStorage.getItem("btnRemove"));
-}
+
+renderCard();
+
