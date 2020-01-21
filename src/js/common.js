@@ -10,17 +10,7 @@ const sectionDelete = document.querySelector(".deletePrev"); // контейне
 
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
-console.log(deleteAllBtn);
-
-function toLocalCard() {
-  let gitCards = allCards.innerHTML;
-  localStorage.setItem("gitCards", gitCards);
-}
-
-function toLocalBtnRemove() {
-  let btnRemove = deleteAllBtn;
-  localStorage.setItem("btnRemove", btnRemove);
-}
+let localStrResult = [];
 
 function getResultFound(items) {
   if (items.length != 0) {
@@ -77,9 +67,7 @@ function getResultFound(items) {
     raitString.innerText = items[i].score; // вставляем
     //////////////////////////////////////////////////////////////////////////////////////////////
     allCards.appendChild(card);
-    toLocalCard();
   }
-  toLocalBtnRemove();
 }
 
 function clearAll() {
@@ -96,9 +84,11 @@ function getData() {
     .then(responce => responce.json())
     .then(json => {
       getResultFound(json.items);
+      localStrResult = json.items;
+      console.log(localStrResult);
+      localStorage.setItem("gitCards", localStrResult);
       if (json.items.length === 0) {
         alert("Простите, но мы не смогли найти людей по такому логину");
-        toLocalCard();
       }
     });
 }
@@ -124,8 +114,3 @@ deleteAllBtn.addEventListener("click", () => {
   clearAll();
   sectionDelete.classList.remove("active");
 });
-
-if (localStorage.getItem("gitCards") && localStorage.getItem("btnRemove")) {
-  allCards.innerHTML = localStorage.getItem("gitCards");
-  // deleteAllBtn.html(localStorage.getItem("btnRemove"));
-}
