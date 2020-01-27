@@ -4,6 +4,7 @@ const path = require("path"); // делает рекваир (практичес
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const polyfill = require("babel-polyfill");
 
 const PATHS = {
   // лучше сразу вывести пути в константу; а зачем мы его поджключаем, если он уже есть в ноде? да просто так принято
@@ -27,14 +28,14 @@ module.exports = {
   entry: {
     // задается точка входа - указываем, что это объект и в этом объекте мы описываем сам путь к входному файлу JS
     // app: "./src/index.js" // это стандартный путь (заходим в папку src и создаем index.js, в котором подключаются все библиотеки). Но мы можем не писать index.js?, мы можем указать просто src и вебпак сам поймет что мы обращаемся к index.js. поэтому тоже самое делаем на строке 19
-    app: PATHS.src
+    app: [polyfill, PATHS.src]
   },
   output: {
     // точка выхода,
     // filename: "[name].js", // почему [name]? потому что, если у нас будет несколько точек входа, то вылезит ошибка. Чтобыв ее не было, пишем [name], который берется из текущего ярлыка
     filename: `${PATHS.assets}js/[name].js`,
     // path: path.resolve(__dirname, "./dist"), // путь, здесь используем тот самый пакет, который устанавливали path. Зачем он? - webpack ищет путь точку входа с самого корня, если это винда то с диска ц и так далее. И для того, чтобы он искал этот путь наиболее корректно. Поэтому мы к нему обращаемся и через метод resolve передаем два параметра 1-ый дирнайм, и название папки дист, чтобы она создавалась здесь
-    path: PATHS.dist, // cмотри строку 19
+    path: path.resolve(__dirname, `${PATHS.dist}`), // cмотри строку 19
     publicPath: "/" // нужен для дев сервера, чтобы он корректно работал
   },
   module: {
