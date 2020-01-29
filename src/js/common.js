@@ -1,16 +1,4 @@
-import { functionTypeParam } from "babel-types";
-// import { getResultFound } from "./render.js";
-
-/////// посмотри, как работает импорт ///////
-/////// первый случай с export default, второй - просто с export ///////
-import Eugene from "./modules/eugene";
-import { work, relax } from "./modules/albert";
-
-let eugene = new Eugene("Eugene", 25);
-
-console.log(eugene.work());
-console.log(work(), relax());
-
+import { newCard, createCard } from "./modules/render";
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
 
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
@@ -21,7 +9,7 @@ const sectionDelete = document.querySelector(".deletePrev"); // контейне
 
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
-let newCard;
+// let newCard;
 
 let saveLocalStorage = localStorage.getItem("gitCards")
   ? JSON.parse(localStorage.getItem("gitCards"))
@@ -31,36 +19,36 @@ if (localStorage.getItem("gitCards")) {
   saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
   getResultFound(saveLocalStorage);
 }
-// const saveLocalStorage = [];
 
-function createCard() {
-  // ф создания шаблона карточки
-  const card = document.createElement("div"); // карточка
-  card.classList.add("cards-item"); // присваиваем класс
+// function createCard() {
+//   // ф создания шаблона карточки
+//   const card = document.createElement("div"); // карточка
+//   card.classList.add("cards-item"); // присваиваем класс
 
-  const cardImg = document.createElement("img"); // аватарка
-  cardImg.classList.add("cards-item__photo"); // присваиваем класс
+//   const cardImg = document.createElement("img"); // аватарка
+//   cardImg.classList.add("cards-item__photo"); // присваиваем класс
 
-  const cardLogin = document.createElement("p"); // логин
-  cardLogin.classList.add("cards-item__login"); // присваиваем класс
-  cardLogin.innerText = "Login";
+//   const cardLogin = document.createElement("p"); // логин
+//   cardLogin.classList.add("cards-item__login"); // присваиваем класс
+//   cardLogin.innerText = "Login";
 
-  const cardWrapperLink = document.createElement("p"); // обертка ссылки
-  cardWrapperLink.classList.add("cards-item__link"); // присваиваем класс
-  const cardLink = document.createElement("a"); // ссылка
-  cardLink.classList.add("goOver"); // присваиваем класс
-  cardWrapperLink.appendChild(cardLink); //аппендим а в р
+//   const cardWrapperLink = document.createElement("p"); // обертка ссылки
+//   cardWrapperLink.classList.add("cards-item__link"); // присваиваем класс
+//   const cardLink = document.createElement("a"); // ссылка
+//   cardLink.classList.add("goOver"); // присваиваем класс
+//   cardWrapperLink.appendChild(cardLink); //аппендим а в р
 
-  const cardRating = document.createElement("p"); // рэйтинг
-  cardRating.classList.add("cards-item__rating"); // присваиваем класс
-  card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
+//   const cardRating = document.createElement("p"); // рэйтинг
+//   cardRating.classList.add("cards-item__rating"); // присваиваем класс
+//   card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
 
-  newCard = card;
+//   newCard = card;
 
-  return newCard;
-}
+//   return newCard;
+// }
 
 function getResultFound(items) {
+  // добавить второй аргумент
   allCards.innerHTML = "";
 
   for (let i = 0; i < items.length; i++) {
@@ -68,7 +56,7 @@ function getResultFound(items) {
     newCard.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    newCard.childNodes[0].setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем
+    newCard.childNodes[0].setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем   найти по классу!!!!!!
     //////////////////////////////////////////////////////////////////////////////////////////////
     let namingString = [...newCard.childNodes].find(
       // дотягиваемся до логина
@@ -82,12 +70,12 @@ function getResultFound(items) {
 
       x => x.className === "cards-item__link"
     );
-    let allCardLinks = [...linkString.childNodes].find(
+    let CardLink = [...linkString.childNodes].find(
       // дотягиваемся до (а)
       y => y.className === "goOver"
     );
-    allCardLinks.innerText = `LINK:   ${items[i].html_url}`; // вставляем
-    allCardLinks.setAttribute("href", items[i].html_url);
+    CardLink.innerText = `LINK:   ${items[i].html_url}`; // вставляем
+    CardLink.setAttribute("href", items[i].html_url);
     //////////////////////////////////////////////////////////////////////////////////////////////
     let raitString = [...newCard.childNodes].find(
       // дотягиваемся до рейтингa
@@ -154,5 +142,3 @@ deleteAllBtn.addEventListener("click", () => {
   clearAll();
   sectionDelete.classList.remove("active");
 });
-
-import "babel-polyfill";
