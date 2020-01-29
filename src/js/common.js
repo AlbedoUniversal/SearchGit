@@ -1,6 +1,16 @@
 import { functionTypeParam } from "babel-types";
 // import { getResultFound } from "./render.js";
 
+/////// посмотри, как работает импорт ///////
+/////// первый случай с export default, второй - просто с export ///////
+import Eugene from './modules/eugene'
+import { work, relax } from './modules/albert'
+
+let eugene = new Eugene('Eugene', 25)
+
+console.log(eugene.work())
+console.log(work(), relax())
+
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
 
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
@@ -147,4 +157,4 @@ deleteAllBtn.addEventListener("click", () => {
   sectionDelete.classList.remove("active");
 });
 
-import "babel-polyfill";
+// import "babel-polyfill";
