@@ -3,13 +3,13 @@ import { functionTypeParam } from "babel-types";
 
 /////// посмотри, как работает импорт ///////
 /////// первый случай с export default, второй - просто с export ///////
-import Eugene from './modules/eugene'
-import { work, relax } from './modules/albert'
+import Eugene from "./modules/eugene";
+import { work, relax } from "./modules/albert";
 
-let eugene = new Eugene('Eugene', 25)
+let eugene = new Eugene("Eugene", 25);
 
-console.log(eugene.work())
-console.log(work(), relax())
+console.log(eugene.work());
+console.log(work(), relax());
 
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
 
@@ -29,9 +29,7 @@ let saveLocalStorage = localStorage.getItem("gitCards")
 
 if (localStorage.getItem("gitCards")) {
   saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
-  saveLocalStorage.forEach(gitCard => {
-    getResultFound(gitCard);
-  });
+  getResultFound(saveLocalStorage);
 }
 // const saveLocalStorage = [];
 
@@ -112,7 +110,7 @@ function clearAll() {
   saveLocalStorage.splice(0, saveLocalStorage.length);
   getResultFound(saveLocalStorage);
   localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
-  delete localStorage["gitCards"];
+  delete localStorage["gitCards"]; // local.storage(remove)
 }
 
 async function getData() {
@@ -157,4 +155,4 @@ deleteAllBtn.addEventListener("click", () => {
   sectionDelete.classList.remove("active");
 });
 
-// import "babel-polyfill";
+import "babel-polyfill";
