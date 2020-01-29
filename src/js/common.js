@@ -1,141 +1,90 @@
-import { newCard, createCard } from "./modules/render";
+import Render from "./modules/render";
+
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
-
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
-
-const allCards = document.querySelector(".cards"); // контейнер с карточками
-
+// const allCards = document.querySelector(".cards"); // контейнер с карточками
 const sectionDelete = document.querySelector(".deletePrev"); // контейнер с кнопкой удаления
-
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
-// let newCard;
+/* Слишком сложная запись для такого простого действия. Ниже показано, как сделать это проще */
+// let saveLocalStorage = localStorage.getItem("gitCards")
+//   ? JSON.parse(localStorage.getItem("gitCards"))
+//   : [];
+let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || []
 
-let saveLocalStorage = localStorage.getItem("gitCards")
-  ? JSON.parse(localStorage.getItem("gitCards"))
-  : [];
-
-if (localStorage.getItem("gitCards")) {
-  saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
-  getResultFound(saveLocalStorage);
-}
-
-// function createCard() {
-//   // ф создания шаблона карточки
-//   const card = document.createElement("div"); // карточка
-//   card.classList.add("cards-item"); // присваиваем класс
-
-//   const cardImg = document.createElement("img"); // аватарка
-//   cardImg.classList.add("cards-item__photo"); // присваиваем класс
-
-//   const cardLogin = document.createElement("p"); // логин
-//   cardLogin.classList.add("cards-item__login"); // присваиваем класс
-//   cardLogin.innerText = "Login";
-
-//   const cardWrapperLink = document.createElement("p"); // обертка ссылки
-//   cardWrapperLink.classList.add("cards-item__link"); // присваиваем класс
-//   const cardLink = document.createElement("a"); // ссылка
-//   cardLink.classList.add("goOver"); // присваиваем класс
-//   cardWrapperLink.appendChild(cardLink); //аппендим а в р
-
-//   const cardRating = document.createElement("p"); // рэйтинг
-//   cardRating.classList.add("cards-item__rating"); // присваиваем класс
-//   card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
-
-//   newCard = card;
-
-//   return newCard;
+/* Код повторяется, незачем парсить 2 раза одно и то же в одну и ту же переменную */
+// if (localStorage.getItem("gitCards")) {
+//   saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
+//   getResultFound(saveLocalStorage);
 // }
 
-function getResultFound(items) {
-  // добавить второй аргумент
-  allCards.innerHTML = "";
-
-  for (let i = 0; i < items.length; i++) {
-    createCard();
-    newCard.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    newCard.childNodes[0].setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем   найти по классу!!!!!!
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    let namingString = [...newCard.childNodes].find(
-      // дотягиваемся до логина
-
-      x => x.className === "cards-item__login"
-    );
-    namingString.innerText = `LOGIN:   ${items[i].login}`; // вставляем
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    let linkString = [...newCard.childNodes].find(
-      // дотягиваемся до p для а
-
-      x => x.className === "cards-item__link"
-    );
-    let CardLink = [...linkString.childNodes].find(
-      // дотягиваемся до (а)
-      y => y.className === "goOver"
-    );
-    CardLink.innerText = `LINK:   ${items[i].html_url}`; // вставляем
-    CardLink.setAttribute("href", items[i].html_url);
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    let raitString = [...newCard.childNodes].find(
-      // дотягиваемся до рейтингa
-      x => x.className === "cards-item__rating"
-    );
-    raitString.innerText = `SCORE:   ${items[i].score}`; // вставляем
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    allCards.appendChild(newCard);
-  }
-  localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
-
-  if (allCards.innerHTML != "") {
-    sectionDelete.classList.add("active");
-  }
-}
+/* А здесь уже можно вызвать рендер, в зависимости от наличия localStorage */
+if (localStorage.getItem("gitCards")) Render.getResultFound(saveLocalStorage);
 
 // ф очищения всего поля с карточками
 function clearAll() {
   inputSearch.value = "";
-  saveLocalStorage.splice(0, saveLocalStorage.length);
-  getResultFound(saveLocalStorage);
-  localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
-  delete localStorage["gitCards"]; // local.storage(remove)
+  /* Никогда не видел, чтобы так очищали массив :). Ниже написал способ попроще и популярнее */
+  // saveLocalStorage.splice(0, saveLocalStorage.length);
+  saveLocalStorage = []
+
+  Render.getResultFound(saveLocalStorage);
+  /* Тоже сильно перемудрил. Без лишнего кода просто удаляем позицию в localStorage */
+  // localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
+  // delete localStorage["gitCards"]; // local.storage(remove)
+  localStorage.removeItem('gitCards')
 }
 
 async function getData() {
-  let res = await fetch(
-    `https://api.github.com/search/users?q=${inputSearch.value}`
-  )
-    .then(responce => responce.json())
+  return await fetch(`https://api.github.com/search/users?q=${inputSearch.value}`)
+    .then(response => response.json())
     .then(json => {
-      saveLocalStorage.splice(0, saveLocalStorage.length);
-      saveLocalStorage.push(...json.items);
-      getResultFound(saveLocalStorage);
+      /* Очень сильно перемудрил. Намного проще перезаписывать переменную, по крайней мере, в твоем случае */
+      // saveLocalStorage.splice(0, saveLocalStorage.length);
+      // saveLocalStorage.push(...json.items);
+      saveLocalStorage = json.items
+
+      Render.getResultFound(saveLocalStorage);
       localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
-      JSON.parse(localStorage.getItem("gitCards"));
-      console.log(...JSON.parse(localStorage.getItem("gitCards")));
-      if (json.items.length === 0) {
+      
+      /* Вообще не понял, зачем это */
+      // JSON.parse(localStorage.getItem("gitCards"));
+      
+      /* 0 - это false. Можешь использовать в таких случаях более лаконичный способ записи условия */
+      // if (json.items.length === 0) {
+      if (!json.items.length) {
         alert("Простите, но мы не смогли найти людей по такому логину");
         inputSearch.value = "";
       }
     });
-  return res;
+
+  /* Ты никак не используешь res в самой функции, а значит, она просто не нужна. Достаточно добавить return к самому запросу */
+  // return res;
 }
 
 //  ф проверки пустого поля и отправка запроса
-function checkEmptyFieldAndSendRequest() {
-  if (inputSearch.value != "") {
-    getData();
-  } else alert("empty field");
+/* слишком длинное название функции. Это ничуть не ошибка, но старайся всегда сокращать свои записи */
+// function checkEmptyFieldAndSendRequest() {
+function checkField() {
+  /* Опять же, пустая строка - это false, плюс конструкция if/else здесь примитивна. В таких случаях пиши лаконичнее */
+  // if (inputSearch.value != "") {
+  //   getData();
+  // } else alert("empty field");
+  inputSearch.value ? getData() : alert('empty field')
 }
 
-btn.addEventListener("click", () => {
-  checkEmptyFieldAndSendRequest();
-});
+/* Если в addEventListener ты передаешь только вызов функции, то не нужно засовывать ее в еще одну функцию. Достаточно записи ниже */
+// btn.addEventListener("click", () => {
+//   checkEmptyFieldAndSendRequest();
+// });
+btn.addEventListener("click", checkField);
 
 inputSearch.addEventListener("keydown", e => {
-  if (e.keyCode === 13) {
-    checkEmptyFieldAndSendRequest();
-  }
+  /* Опять же, пробуй писать короче и лаконичнее */
+  // if (e.keyCode === 13) {
+  //   checkEmptyFieldAndSendRequest();
+  // }
+  if (e.keyCode === 13) checkField()
 });
 
 deleteAllBtn.addEventListener("click", () => {
