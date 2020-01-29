@@ -13,10 +13,16 @@ const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка уд�
 
 let newCard;
 
-const saveLocalStorage = localStorage.getItem("gitCards")
+let saveLocalStorage = localStorage.getItem("gitCards")
   ? JSON.parse(localStorage.getItem("gitCards"))
   : [];
 
+if (localStorage.getItem("gitCards")) {
+  saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
+  saveLocalStorage.forEach(gitCard => {
+    getResultFound(gitCard);
+  });
+}
 // const saveLocalStorage = [];
 
 function createCard() {
@@ -48,7 +54,7 @@ function createCard() {
 
 function getResultFound(items) {
   allCards.innerHTML = "";
-  // saveLocalStorage.splice(0, saveLocalStorage.length);
+
   for (let i = 0; i < items.length; i++) {
     createCard();
     newCard.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
@@ -82,15 +88,16 @@ function getResultFound(items) {
     raitString.innerText = `SCORE:   ${items[i].score}`; // вставляем
     //////////////////////////////////////////////////////////////////////////////////////////////
     allCards.appendChild(newCard);
-    localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
   }
+  localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
+
   if (allCards.innerHTML != "") {
     sectionDelete.classList.add("active");
   }
 }
 
+// ф очищения всего поля с карточками
 function clearAll() {
-  // ф очищения всего поля с карточками
   inputSearch.value = "";
   saveLocalStorage.splice(0, saveLocalStorage.length);
   getResultFound(saveLocalStorage);
@@ -107,8 +114,9 @@ async function getData() {
       saveLocalStorage.splice(0, saveLocalStorage.length);
       saveLocalStorage.push(...json.items);
       getResultFound(saveLocalStorage);
-      console.log(saveLocalStorage);
       localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
+      JSON.parse(localStorage.getItem("gitCards"));
+      console.log(...JSON.parse(localStorage.getItem("gitCards")));
       if (json.items.length === 0) {
         alert("Простите, но мы не смогли найти людей по такому логину");
         inputSearch.value = "";
@@ -117,8 +125,8 @@ async function getData() {
   return res;
 }
 
+//  ф проверки пустого поля и отправка запроса
 function checkEmptyFieldAndSendRequest() {
-  //  ф проверки пустого поля и отправка запроса
   if (inputSearch.value != "") {
     getData();
   } else alert("empty field");
