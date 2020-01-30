@@ -22,39 +22,49 @@ const Render = {
     cardRating.classList.add("cards-item__rating"); // присваиваем класс
     card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
 
-    this.newCard = card
+    this.newCard = card;
+    console.log(this.newCard);
   },
 
   getResultFound(items) {
-    let parent = document.querySelector(".cards")
+    let parent = document.querySelector(".cards");
     parent.innerHTML = "";
-  
+
     for (let i = 0; i < items.length; i++) {
       this.createCard();
       this.newCard.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
       this.newCard.childNodes[0].setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем   найти по классу!!!!!!
 
       // дотягиваемся до логина
-      let namingString = [...this.newCard.childNodes].find(x => x.className === "cards-item__login");
+      let namingString = [...this.newCard.childNodes].find(
+        x => x.className === "cards-item__login"
+      );
       namingString.innerText = `LOGIN:   ${items[i].login}`; // вставляем
 
       // дотягиваемся до p для а
-      let linkString = [...this.newCard.childNodes].find(x => x.className === "cards-item__link");
+      let linkString = [...this.newCard.childNodes].find(
+        x => x.className === "cards-item__link"
+      );
 
       // дотягиваемся до (а)
-      let CardLink = [...linkString.childNodes].find(y => y.className === "goOver");
+      let CardLink = [...linkString.childNodes].find(
+        y => y.className === "goOver"
+      );
       CardLink.innerText = `LINK:   ${items[i].html_url}`; // вставляем
       CardLink.setAttribute("href", items[i].html_url);
 
       // дотягиваемся до рейтингa
-      let raitString = [...this.newCard.childNodes].find(x => x.className === "cards-item__rating");
+      let raitString = [...this.newCard.childNodes].find(
+        x => x.className === "cards-item__rating"
+      );
       raitString.innerText = `SCORE:   ${items[i].score}`; // вставляем
 
       parent.appendChild(this.newCard);
     }
 
-    if (parent.innerHTML != "") document.querySelector(".deletePrev").classList.add("active")
+    if (parent.innerHTML != "")
+      document.querySelector(".deletePrev").classList.add("active");
   }
-}
+};
 
-export default Render
+export default Render;
