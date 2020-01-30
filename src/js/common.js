@@ -10,7 +10,7 @@ const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка уд�
 // let saveLocalStorage = localStorage.getItem("gitCards")
 //   ? JSON.parse(localStorage.getItem("gitCards"))
 //   : [];
-let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || []
+let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || [];
 
 /* Код повторяется, незачем парсить 2 раза одно и то же в одну и ту же переменную */
 // if (localStorage.getItem("gitCards")) {
@@ -19,37 +19,40 @@ let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || []
 // }
 
 /* А здесь уже можно вызвать рендер, в зависимости от наличия localStorage */
-if (localStorage.getItem("gitCards")) Render.getResultFound(saveLocalStorage);
+// if (localStorage.getItem("gitCards")) Render.getResultFound(saveLocalStorage);
+if (saveLocalStorage.length) Render.getResultFound(saveLocalStorage);
 
 // ф очищения всего поля с карточками
 function clearAll() {
   inputSearch.value = "";
   /* Никогда не видел, чтобы так очищали массив :). Ниже написал способ попроще и популярнее */
   // saveLocalStorage.splice(0, saveLocalStorage.length);
-  saveLocalStorage = []
+  saveLocalStorage = [];
 
   Render.getResultFound(saveLocalStorage);
   /* Тоже сильно перемудрил. Без лишнего кода просто удаляем позицию в localStorage */
   // localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
   // delete localStorage["gitCards"]; // local.storage(remove)
-  localStorage.removeItem('gitCards')
+  localStorage.removeItem("gitCards");
 }
 
 async function getData() {
-  return await fetch(`https://api.github.com/search/users?q=${inputSearch.value}`)
+  return await fetch(
+    `https://api.github.com/search/users?q=${inputSearch.value}`
+  )
     .then(response => response.json())
     .then(json => {
       /* Очень сильно перемудрил. Намного проще перезаписывать переменную, по крайней мере, в твоем случае */
       // saveLocalStorage.splice(0, saveLocalStorage.length);
       // saveLocalStorage.push(...json.items);
-      saveLocalStorage = json.items
+      saveLocalStorage = json.items;
 
       Render.getResultFound(saveLocalStorage);
       localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
-      
+
       /* Вообще не понял, зачем это */
       // JSON.parse(localStorage.getItem("gitCards"));
-      
+
       /* 0 - это false. Можешь использовать в таких случаях более лаконичный способ записи условия */
       // if (json.items.length === 0) {
       if (!json.items.length) {
@@ -70,7 +73,7 @@ function checkField() {
   // if (inputSearch.value != "") {
   //   getData();
   // } else alert("empty field");
-  inputSearch.value ? getData() : alert('empty field')
+  inputSearch.value ? getData() : alert("empty field");
 }
 
 /* Если в addEventListener ты передаешь только вызов функции, то не нужно засовывать ее в еще одну функцию. Достаточно записи ниже */
@@ -84,7 +87,7 @@ inputSearch.addEventListener("keydown", e => {
   // if (e.keyCode === 13) {
   //   checkEmptyFieldAndSendRequest();
   // }
-  if (e.keyCode === 13) checkField()
+  if (e.keyCode === 13) checkField();
 });
 
 deleteAllBtn.addEventListener("click", () => {
