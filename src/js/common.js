@@ -9,6 +9,8 @@ const sectionDelete = document.querySelector(".deletePrev"); // контейне
 
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
+let offSet = 0;
+
 // let newCard;
 
 let saveLocalStorage = localStorage.getItem("gitCards")
