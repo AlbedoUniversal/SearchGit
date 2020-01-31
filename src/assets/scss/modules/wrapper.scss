@@ -75,6 +75,7 @@
       .deletePrev {
         display: none;
         .deleteAll {
+          margin-top: 3em;
           border-radius: rem(3);
           outline: none;
           border: 1px solid rgb(73, 63, 18);
@@ -86,6 +87,24 @@
           &:hover {
             background-color: #000000;
             color: aliceblue;
+          }
+        }
+      }
+      ul {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        li {
+          margin: 0 10px;
+          flex-basis: 2%;
+          border: 1px solid black;
+          background-color: rgba(236, 238, 117, 0.7);
+          transition: all 0.3s;
+          font-size: 0.7em;
+          padding: 0.2em;
+          cursor: pointer;
+          &:hover {
+            background-color: #eb7937;
           }
         }
       }

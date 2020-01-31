@@ -1,4 +1,5 @@
 import { newCard, createCard } from "./modules/render";
+
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
 
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
@@ -9,9 +10,7 @@ const sectionDelete = document.querySelector(".deletePrev"); // контейне
 
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
-let offSet = 0;
-
-// let newCard;
+// --------------------------------------------------------------
 
 let saveLocalStorage = localStorage.getItem("gitCards")
   ? JSON.parse(localStorage.getItem("gitCards"))
@@ -22,32 +21,33 @@ if (localStorage.getItem("gitCards")) {
   getResultFound(saveLocalStorage);
 }
 
-// function createCard() {
-//   // ф создания шаблона карточки
-//   const card = document.createElement("div"); // карточка
-//   card.classList.add("cards-item"); // присваиваем класс
+console.log(saveLocalStorage);
 
-//   const cardImg = document.createElement("img"); // аватарка
-//   cardImg.classList.add("cards-item__photo"); // присваиваем класс
+let arrLi = []; // массив, куда будут пушиться все li
+let pagination = document.querySelector("#paginations"); // ul, где все li
+let notesOnPage = 6; // количество страниц, для отображения
 
-//   const cardLogin = document.createElement("p"); // логин
-//   cardLogin.classList.add("cards-item__login"); // присваиваем класс
-//   cardLogin.innerText = "Login";
+let countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
 
-//   const cardWrapperLink = document.createElement("p"); // обертка ссылки
-//   cardWrapperLink.classList.add("cards-item__link"); // присваиваем класс
-//   const cardLink = document.createElement("a"); // ссылка
-//   cardLink.classList.add("goOver"); // присваиваем класс
-//   cardWrapperLink.appendChild(cardLink); //аппендим а в р
+function countLi() {
+  for (let j = 1; j <= countOfpaginchiki; j++) {
+    let li = document.createElement("li");
+    li.innerText = j;
+    pagination.appendChild(li);
+    arrLi.push(li);
+  }
+}
+countLi();
 
-//   const cardRating = document.createElement("p"); // рэйтинг
-//   cardRating.classList.add("cards-item__rating"); // присваиваем класс
-//   card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
-
-//   newCard = card;
-
-//   return newCard;
-// }
+for (let item of arrLi) {
+  item.addEventListener("click", function() {
+    let pageNum = +this.innerHTML;
+    let start = (pageNum - 1) * notesOnPage;
+    let end = start + notesOnPage;
+    let notes = saveLocalStorage.slice(start, end);
+    getResultFound(notes);
+  });
+}
 
 function getResultFound(items) {
   // добавить второй аргумент
@@ -55,10 +55,14 @@ function getResultFound(items) {
 
   for (let i = 0; i < items.length; i++) {
     createCard();
-    newCard.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
+    newCard.setAttribute("data-index-number", i + 1); // даем айди карточке, согласно его номеру в массиве
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    newCard.childNodes[0].setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем   найти по классу!!!!!!
+    let img = [...newCard.childNodes].find(
+      x => x.className === "cards-item__photo"
+    );
+    img.setAttribute("src", items[i].avatar_url);
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     let namingString = [...newCard.childNodes].find(
       // дотягиваемся до логина
@@ -111,10 +115,10 @@ async function getData() {
     .then(json => {
       saveLocalStorage.splice(0, saveLocalStorage.length);
       saveLocalStorage.push(...json.items);
+
       getResultFound(saveLocalStorage);
       localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
       JSON.parse(localStorage.getItem("gitCards"));
-      console.log(...JSON.parse(localStorage.getItem("gitCards")));
       if (json.items.length === 0) {
         alert("Простите, но мы не смогли найти людей по такому логину");
         inputSearch.value = "";
