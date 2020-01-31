@@ -23,7 +23,6 @@ const Render = {
     card.append(cardImg, cardLogin, cardWrapperLink, cardRating); //наполняем карточку
 
     this.newCard = card;
-    console.log(this.newCard);
   },
 
   getResultFound(items) {
@@ -33,7 +32,12 @@ const Render = {
     for (let i = 0; i < items.length; i++) {
       this.createCard();
       this.newCard.setAttribute("data-index-number", i); // даем айди карточке, согласно его номеру в массиве
-      this.newCard.childNodes[0].setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем   найти по классу!!!!!!
+
+      let img = [...this.newCard.childNodes].find(
+        x => x.className === "cards-item__photo"
+      );
+      img.setAttribute("src", items[i].avatar_url);
+      // photoAva.setAttribute("src", items[i].avatar_url); // присваем урл каждой картинки - вставляем   найти по классу!!!!!!
 
       // дотягиваемся до логина
       let namingString = [...this.newCard.childNodes].find(
