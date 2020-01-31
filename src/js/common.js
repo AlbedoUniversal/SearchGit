@@ -104,7 +104,6 @@ function getResultFound(items) {
 function clearAll() {
   inputSearch.value = "";
   saveLocalStorage.splice(0, saveLocalStorage.length);
-  z;
   getResultFound(saveLocalStorage);
   localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
   delete localStorage["gitCards"]; // local.storage(remove)
@@ -116,9 +115,9 @@ async function getData() {
   )
     .then(responce => responce.json())
     .then(json => {
-      // saveLocalStorage.splice(0, saveLocalStorage.length);
-      // saveLocalStorage.push(...json.items);
-      saveLocalStorage = json.items;
+      saveLocalStorage.splice(0, saveLocalStorage.length);
+      saveLocalStorage.push(...json.items);
+      // saveLocalStorage = json.items;
 
       getResultFound(saveLocalStorage);
       localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
