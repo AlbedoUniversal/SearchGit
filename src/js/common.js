@@ -11,45 +11,51 @@ const sectionDelete = document.querySelector(".deletePrev"); // контейне
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
 
 // --------------------------------------------------------------
-
-let saveLocalStorage = localStorage.getItem("gitCards")
-  ? JSON.parse(localStorage.getItem("gitCards"))
-  : [];
-
-if (localStorage.getItem("gitCards")) {
-  saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
-  getResultFound(saveLocalStorage);
-}
-
-console.log(saveLocalStorage);
-
 let arrLi = []; // массив, куда будут пушиться все li
 let pagination = document.querySelector("#paginations"); // ul, где все li
 let notesOnPage = 6; // количество страниц, для отображения
+let notes = localStorage.getItem("gitCards")
+  ? JSON.parse(localStorage.getItem("gitCards"))
+  : [];
 
-let countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
+let saveLocalStorage = [];
 
-console.log(1);
+if (localStorage.getItem("gitCards")) {
+  saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
+  getResultFound(notes);
+}
 
 function countLi() {
+  let a = saveLocalStorage.slice(0, 6);
+  let countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
+  getResultFound(a);
   for (let j = 1; j <= countOfpaginchiki; j++) {
     let li = document.createElement("li");
     li.innerText = j;
     pagination.appendChild(li);
     arrLi.push(li);
+    for (let item of arrLi) {
+      item.addEventListener("click", function() {
+        let pageNum = +item.innerHTML;
+        let start = (pageNum - 1) * notesOnPage;
+        let end = start + notesOnPage;
+        notes = saveLocalStorage.slice(start, end);
+        console.log(notes);
+        getResultFound(notes);
+      });
+    }
   }
 }
-countLi();
 
-for (let item of arrLi) {
-  item.addEventListener("click", function() {
-    let pageNum = +this.innerHTML;
-    let start = (pageNum - 1) * notesOnPage;
-    let end = start + notesOnPage;
-    let notes = saveLocalStorage.slice(start, end);
-    getResultFound(notes);
-  });
-}
+// for (let item of arrLi) {
+//   item.addEventListener("click", function() {
+//     let pageNum = +this.innerHTML;
+//     let start = (pageNum - 1) * notesOnPage;
+//     let end = start + notesOnPage;
+//     let notes = saveLocalStorage.slice(start, end);
+//     getResultFound(notes);
+//   });
+// }
 
 function getResultFound(items) {
   // добавить второй аргумент
@@ -93,7 +99,7 @@ function getResultFound(items) {
     //////////////////////////////////////////////////////////////////////////////////////////////
     allCards.appendChild(newCard);
   }
-  localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
+  localStorage.setItem("gitCards", JSON.stringify(notes));
 
   if (allCards.innerHTML != "") {
     sectionDelete.classList.add("active");
@@ -103,9 +109,9 @@ function getResultFound(items) {
 // ф очищения всего поля с карточками
 function clearAll() {
   inputSearch.value = "";
-  saveLocalStorage.splice(0, saveLocalStorage.length);
-  getResultFound(saveLocalStorage);
-  localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
+  notes.splice(0, notes.length);
+  getResultFound(notes);
+  localStorage.setItem("gitCards", JSON.stringify(notes));
   delete localStorage["gitCards"]; // local.storage(remove)
 }
 
@@ -115,12 +121,12 @@ async function getData() {
   )
     .then(responce => responce.json())
     .then(json => {
-      saveLocalStorage.splice(0, saveLocalStorage.length);
-      saveLocalStorage.push(...json.items);
-      // saveLocalStorage = json.items;
-
-      getResultFound(saveLocalStorage);
-      localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
+      // saveLocalStorage.splice(0, saveLocalStorage.length);
+      // saveLocalStorage.push(...json.items);
+      saveLocalStorage = json.items;
+      countLi();
+      // getResultFound(saveLocalStorage);
+      localStorage.setItem("gitCards", JSON.stringify(notes));
       JSON.parse(localStorage.getItem("gitCards"));
       if (json.items.length === 0) {
         alert("Простите, но мы не смогли найти людей по такому логину");
@@ -134,6 +140,7 @@ async function getData() {
 function checkEmptyFieldAndSendRequest() {
   if (inputSearch.value != "") {
     getData();
+    console.log(notes);
   } else alert("empty field");
 }
 
