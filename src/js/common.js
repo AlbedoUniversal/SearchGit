@@ -14,21 +14,19 @@ const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка уд�
 let arrLi = []; // массив, куда будут пушиться все li
 let pagination = document.querySelector("#paginations"); // ul, где все li
 let notesOnPage = 6; // количество страниц, для отображения
-let notes = localStorage.getItem("gitCards")
-  ? JSON.parse(localStorage.getItem("gitCards"))
-  : [];
-
 let saveLocalStorage = [];
 
-if (localStorage.getItem("gitCards")) {
-  saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
-  getResultFound(notes);
-}
+let notes = JSON.parse(localStorage.getItem("gitCards")) || [];
+// let notes = [];
+// if (localStorage.getItem("gitCards")) {
+//   saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
+//   getResultFound(notes);
+// }
 
 function countLi() {
   let a = saveLocalStorage.slice(0, 6);
-  let countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
   getResultFound(a);
+  let countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
   for (let j = 1; j <= countOfpaginchiki; j++) {
     let li = document.createElement("li");
     li.innerText = j;
@@ -109,9 +107,9 @@ function getResultFound(items) {
 // ф очищения всего поля с карточками
 function clearAll() {
   inputSearch.value = "";
-  notes.splice(0, notes.length);
+  notes = [];
   getResultFound(notes);
-  localStorage.setItem("gitCards", JSON.stringify(notes));
+  // localStorage.setItem("gitCards", JSON.stringify(notes));
   delete localStorage["gitCards"]; // local.storage(remove)
 }
 
@@ -140,7 +138,6 @@ async function getData() {
 function checkEmptyFieldAndSendRequest() {
   if (inputSearch.value != "") {
     getData();
-    console.log(notes);
   } else alert("empty field");
 }
 
