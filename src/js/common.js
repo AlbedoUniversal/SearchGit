@@ -14,9 +14,10 @@ const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка уд�
 let arrLi = []; // массив, куда будут пушиться все li
 let pagination = document.querySelector("#paginations"); // ul, где все li
 let notesOnPage = 6; // количество страниц, для отображения
-let saveLocalStorage = [];
+let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || [];
+let countOfpaginchiki = 0;
 
-let notes = JSON.parse(localStorage.getItem("gitCards")) || [];
+// let notes = JSON.parse(localStorage.getItem("gitCards")) || [];
 // let notes = [];
 // if (localStorage.getItem("gitCards")) {
 //   saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
@@ -24,36 +25,25 @@ let notes = JSON.parse(localStorage.getItem("gitCards")) || [];
 // }
 
 function countLi() {
-  let a = saveLocalStorage.slice(0, 6);
-  getResultFound(a);
-  let countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
+  pagination.innerHTML = "";
+  getResultFound(saveLocalStorage.slice(0, 6));
+  countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
   for (let j = 1; j <= countOfpaginchiki; j++) {
     let li = document.createElement("li");
     li.innerText = j;
     pagination.appendChild(li);
     arrLi.push(li);
     for (let item of arrLi) {
-      item.addEventListener("click", function() {
+      item.addEventListener("click", () => {
         let pageNum = +item.innerHTML;
         let start = (pageNum - 1) * notesOnPage;
         let end = start + notesOnPage;
-        notes = saveLocalStorage.slice(start, end);
-        console.log(notes);
-        getResultFound(notes);
+        saveLocalStorage.slice(start, end);
+        getResultFound(saveLocalStorage.slice(start, end));
       });
     }
   }
 }
-
-// for (let item of arrLi) {
-//   item.addEventListener("click", function() {
-//     let pageNum = +this.innerHTML;
-//     let start = (pageNum - 1) * notesOnPage;
-//     let end = start + notesOnPage;
-//     let notes = saveLocalStorage.slice(start, end);
-//     getResultFound(notes);
-//   });
-// }
 
 function getResultFound(items) {
   // добавить второй аргумент
@@ -97,7 +87,7 @@ function getResultFound(items) {
     //////////////////////////////////////////////////////////////////////////////////////////////
     allCards.appendChild(newCard);
   }
-  localStorage.setItem("gitCards", JSON.stringify(notes));
+  localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
 
   if (allCards.innerHTML != "") {
     sectionDelete.classList.add("active");
@@ -107,10 +97,12 @@ function getResultFound(items) {
 // ф очищения всего поля с карточками
 function clearAll() {
   inputSearch.value = "";
-  notes = [];
-  getResultFound(notes);
-  // localStorage.setItem("gitCards", JSON.stringify(notes));
+  arrLi = [];
+  saveLocalStorage = [];
+  getResultFound(saveLocalStorage);
+  localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
   delete localStorage["gitCards"]; // local.storage(remove)
+  console.log(arrLi);
 }
 
 async function getData() {
@@ -119,12 +111,10 @@ async function getData() {
   )
     .then(responce => responce.json())
     .then(json => {
-      // saveLocalStorage.splice(0, saveLocalStorage.length);
-      // saveLocalStorage.push(...json.items);
       saveLocalStorage = json.items;
       countLi();
       // getResultFound(saveLocalStorage);
-      localStorage.setItem("gitCards", JSON.stringify(notes));
+      localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
       JSON.parse(localStorage.getItem("gitCards"));
       if (json.items.length === 0) {
         alert("Простите, но мы не смогли найти людей по такому логину");
@@ -135,14 +125,14 @@ async function getData() {
 }
 
 //  ф проверки пустого поля и отправка запроса
-function checkEmptyFieldAndSendRequest() {
+function checkField() {
   if (inputSearch.value != "") {
     getData();
   } else alert("empty field");
 }
 
 btn.addEventListener("click", () => {
-  checkEmptyFieldAndSendRequest();
+  checkField();
 });
 
 inputSearch.addEventListener("keydown", e => {
