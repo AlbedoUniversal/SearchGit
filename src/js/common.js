@@ -17,12 +17,7 @@ let notesOnPage = 6; // количество страниц, для отобра
 let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || [];
 let countOfpaginchiki = 0;
 
-// let notes = JSON.parse(localStorage.getItem("gitCards")) || [];
-// let notes = [];
-// if (localStorage.getItem("gitCards")) {
-//   saveLocalStorage = JSON.parse(localStorage.getItem("gitCards"));
-//   getResultFound(notes);
-// }
+if (localStorage.getItem("gitCards")) countLi();
 
 function countLi() {
   pagination.innerHTML = "";

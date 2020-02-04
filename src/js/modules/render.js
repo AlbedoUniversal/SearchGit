@@ -1,3 +1,5 @@
+// const Rendering
+
 export let newCard;
 
 export function createCard() {
