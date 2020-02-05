@@ -23,8 +23,8 @@ const Rendering = {
 
     this.newCard = card;
   },
-  getResultFound(items) {
-    let allCards = document.querySelector(".cards");
+  drawCards(items) {
+    const allCards = document.querySelector(".cards");
 
     allCards.innerHTML = "";
 

@@ -31,3 +31,12 @@
     @content;
   }
 }
+
+@keyframes jump {
+  from {
+    top: -100px;
+  }
+  to {
+    top: -32px;
+  }
+}

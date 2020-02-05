@@ -5,41 +5,16 @@ const inputSearch = document.querySelector(".inputs-search"); //инпут, ку
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
 const sectionDelete = document.querySelector(".deletePrev"); // контейнер с кнопкой удаления
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
-// const pagination = document.querySelector("#paginations"); // ul, где все li
 
 let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || [];
-// let arrLi = []; // массив, куда будут пушиться все li
-// let notesOnPage = 6; // количество страниц, для отображения
-// let countOfpaginchiki = 0;
 
-if (localStorage.getItem("gitCards")) Pagination.countLi();
-
-// function countLi() {
-//   pagination.innerHTML = "";
-//   Rendering.getResultFound(saveLocalStorage.slice(0, 6));
-//   countOfpaginchiki = Math.ceil(saveLocalStorage.length / notesOnPage);
-//   for (let j = 1; j <= countOfpaginchiki; j++) {
-//     let li = document.createElement("li");
-//     li.innerText = j;
-//     pagination.appendChild(li);
-//     arrLi.push(li);
-//     for (let item of arrLi) {
-//       item.addEventListener("click", () => {
-//         let pageNum = +item.innerHTML;
-//         let start = (pageNum - 1) * notesOnPage;
-//         let end = start + notesOnPage;
-//         saveLocalStorage.slice(start, end);
-//         Rendering.getResultFound(saveLocalStorage.slice(start, end));
-//       });
-//     }
-//   }
-// }
+if (localStorage.getItem("gitCards")) Pagination.countLi(saveLocalStorage);
 
 // ф очищения всего поля с карточками
 function clearAll() {
   inputSearch.value = "";
   saveLocalStorage = [];
-  Rendering.getResultFound(saveLocalStorage);
+  Pagination.countLi(saveLocalStorage);
   localStorage.removeItem("gitcards");
 }
 
@@ -50,7 +25,7 @@ async function getData() {
     .then(responce => responce.json())
     .then(json => {
       saveLocalStorage = json.items;
-      Pagination.countLi();
+      Pagination.countLi(saveLocalStorage);
       localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
       JSON.parse(localStorage.getItem("gitCards"));
 
