@@ -33,10 +33,22 @@
 }
 
 @keyframes jump {
-  from {
+  0% {
     top: -100px;
   }
-  to {
-    top: -32px;
+  100% {
+    top: -34px;
+  }
+}
+
+@keyframes vibro {
+  90% {
+    top: -35px;
+  }
+  100% {
+    top: -34px;
+  }
+  90% {
+    top: -35px;
   }
 }

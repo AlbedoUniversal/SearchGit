@@ -85,7 +85,7 @@
           cursor: pointer;
           transition: 0.3s;
           &:hover {
-            background-color: #000000;
+            background-color: #f11a1a;
             color: aliceblue;
           }
         }
@@ -120,12 +120,12 @@
               position: absolute;
               height: 30px;
               width: 30px;
-              background-image: url(/assets/img/ping.png);
+              background-image: url(/assets/img/ring.png);
               background-size: cover;
               background-repeat: no-repeat;
-              top: -32px;
+              top: -34px;
               left: -3px;
-              animation: jump 0.6s;
+              animation: jump 0.6s, vibro 0.6s infinite;
             }
             &:hover {
               transform: scale(1);
