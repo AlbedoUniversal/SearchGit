@@ -15,7 +15,7 @@ function clearAll() {
   inputSearch.value = "";
   saveLocalStorage = [];
   Pagination.countLi(saveLocalStorage);
-  localStorage.removeItem("gitcards");
+  localStorage.removeItem("gitCards");
 }
 
 async function getData() {

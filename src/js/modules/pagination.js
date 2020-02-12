@@ -1,7 +1,8 @@
 import Rendering from "./render";
+let r = document.querySelector(".radio-box__checkmark");
 
 const Pagination = {
-  notesOnPage: 6,
+  notesOnPage: 3,
   roundedPaginationNumbers: 0,
   arrPaginationLi: [],
   activeLi: null,
@@ -13,7 +14,7 @@ const Pagination = {
   countLi(arr) {
     let parent = document.querySelector("#paginations");
     parent.innerHTML = "";
-    Rendering.drawCards(arr.slice(0, 6));
+    Rendering.drawCards(arr.slice(0, this.notesOnPage));
     this.roundedPaginationNumbers = Math.ceil(arr.length / this.notesOnPage);
     for (let j = 1; j <= this.roundedPaginationNumbers; j++) {
       let li = document.createElement("li");
@@ -29,10 +30,7 @@ const Pagination = {
           let end = start + this.notesOnPage;
           arr.slice(start, end);
           Rendering.drawCards(arr.slice(start, end));
-          // localStorage.setItem(
-          //   "gitCards",
-          //   JSON.stringify(arr.slice(start, end))
-          // );
+          // localStorage.setItem("gitCards", JSON.stringify(arr)); напомнить про это
         });
       }
     }
