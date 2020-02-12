@@ -29,6 +29,10 @@ const Pagination = {
           let end = start + this.notesOnPage;
           arr.slice(start, end);
           Rendering.drawCards(arr.slice(start, end));
+          // localStorage.setItem(
+          //   "gitCards",
+          //   JSON.stringify(arr.slice(start, end))
+          // );
         });
       }
     }

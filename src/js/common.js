@@ -1,4 +1,4 @@
-import Rendering from "./modules/render";
+// import Rendering from "./modules/render";
 import Pagination from "./modules/pagination";
 
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
@@ -28,7 +28,6 @@ async function getData() {
       Pagination.countLi(saveLocalStorage);
       localStorage.setItem("gitCards", JSON.stringify(saveLocalStorage));
       JSON.parse(localStorage.getItem("gitCards"));
-
       if (!json.items.length) {
         alert("Простите, но мы не смогли найти людей по такому логину");
         inputSearch.value = "";
