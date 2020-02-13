@@ -1,11 +1,11 @@
 // import Rendering from "./modules/render";
 import Pagination from "./modules/pagination";
+import Radio from "./modules/radio";
 
 const inputSearch = document.querySelector(".inputs-search"); //инпут, куда вводится текст поиска
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
 const sectionDelete = document.querySelector(".deletePrev"); // контейнер с кнопкой удаления
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
-let r = document.querySelectorAll(".radio-box__input");
 
 let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || [];
 
@@ -17,6 +17,7 @@ function clearAll() {
   saveLocalStorage = [];
   Pagination.countLi(saveLocalStorage);
   localStorage.removeItem("gitCards");
+  console.log(Radio.notesOnPage);
 }
 
 async function getData() {
@@ -53,10 +54,3 @@ deleteAllBtn.addEventListener("click", () => {
   clearAll();
   sectionDelete.classList.remove("active");
 });
-
-for (let item of r) {
-  item.addEventListener("click", () => {
-    Pagination.notesOnPage = item.value;
-    Pagination.countLi(saveLocalStorage);
-  });
-}

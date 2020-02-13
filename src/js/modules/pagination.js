@@ -1,5 +1,4 @@
 import Rendering from "./render";
-// let r = document.querySelector(".radio-box__checkmark");
 
 const Pagination = {
   notesOnPage: 3,
@@ -12,7 +11,7 @@ const Pagination = {
     this.activeLi.classList.add("active");
   },
   countLi(arr) {
-    let parent = document.querySelector("#paginations");
+    const parent = document.querySelector("#paginations");
     parent.innerHTML = "";
     Rendering.drawCards(arr.slice(0, this.notesOnPage));
     this.roundedPaginationNumbers = Math.ceil(arr.length / this.notesOnPage);
@@ -36,10 +35,6 @@ const Pagination = {
     }
   }
 };
-
-// r.addEventListener("click", () => {
-//   Pagination.notesOnPage = 6;
-// });
 
 export default Pagination;
 
