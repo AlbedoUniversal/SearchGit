@@ -1,5 +1,5 @@
 import Rendering from "./render";
-let r = document.querySelector(".radio-box__checkmark");
+// let r = document.querySelector(".radio-box__checkmark");
 
 const Pagination = {
   notesOnPage: 3,
@@ -36,6 +36,10 @@ const Pagination = {
     }
   }
 };
+
+// r.addEventListener("click", () => {
+//   Pagination.notesOnPage = 6;
+// });
 
 export default Pagination;
 

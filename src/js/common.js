@@ -5,6 +5,7 @@ const inputSearch = document.querySelector(".inputs-search"); //инпут, ку
 const btn = document.querySelector(".inputs-type"); //кнопка поиска
 const sectionDelete = document.querySelector(".deletePrev"); // контейнер с кнопкой удаления
 const deleteAllBtn = document.querySelector(".deleteAll"); // кнопка удалить все
+let r = document.querySelectorAll(".radio-box__input");
 
 let saveLocalStorage = JSON.parse(localStorage.getItem("gitCards")) || [];
 
@@ -52,3 +53,10 @@ deleteAllBtn.addEventListener("click", () => {
   clearAll();
   sectionDelete.classList.remove("active");
 });
+
+for (let item of r) {
+  item.addEventListener("click", () => {
+    Pagination.notesOnPage = item.value;
+    Pagination.countLi(saveLocalStorage);
+  });
+}
